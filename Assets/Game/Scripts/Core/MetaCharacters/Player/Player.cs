@@ -6,6 +6,7 @@ namespace SM.FPS
 	{
 		[SerializeField] private CharacterMovementControls _characterMovementControls;
 		[SerializeField] private CharacterAimControls _characterAimControls;
+		[SerializeField] private CharacterFirearmControls _characterFirearmControls;
 		
 		private PlayerInput _playerInput;
 
@@ -22,6 +23,8 @@ namespace SM.FPS
 			UpdateMovementControls();
 
 			UpdateAimControls();
+			
+			UpdateFirearmControls();
 		}
 
 		private void UpdateMovementControls()
@@ -46,6 +49,40 @@ namespace SM.FPS
 		{
 			Vector2 aimDeltaInput = _playerInput.Character.Aim.ReadValue<Vector2>();
 			_characterAimControls.RotateAim(aimDeltaInput);
+		}
+
+		private void UpdateFirearmControls()
+		{
+			if (_playerInput.Weapons.MainFire.WasPressedThisFrame())
+			{
+				_characterFirearmControls.PressWeaponMainPullTrigger();
+			}
+			else if (_playerInput.Weapons.MainFire.WasReleasedThisFrame())
+			{
+				_characterFirearmControls.ReleaseWeaponMainPullTrigger();
+			}
+			
+			if (_playerInput.Weapons.AlterFire.WasPressedThisFrame())
+			{
+				_characterFirearmControls.PressWeaponAlterPullTrigger();
+			}
+			else if (_playerInput.Weapons.AlterFire.WasReleasedThisFrame())
+			{
+				_characterFirearmControls.ReleaseWeaponAlterPullTrigger();
+			}
+
+			if (_playerInput.Weapons.ThrowAwayWeapon.WasPressedThisFrame())
+			{
+				_characterFirearmControls.ThrowAwayCurrentWeapon();
+			}
+			
+			if (_playerInput.Weapons.Reload.WasPressedThisFrame())
+			{
+				_characterFirearmControls.ReloadCurrentWeapon();
+			}
+
+			float scroll = _playerInput.Weapons.ScrollInventory.ReadValue<float>();
+			_characterFirearmControls.ScrollWeapons((int)scroll);
 		}
 	}
 }

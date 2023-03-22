@@ -6,7 +6,7 @@ namespace SM.FPS
 	{
 		[SerializeField] private CharacterVerticalMovement _characterVerticalMovement;
 		[SerializeField] private CharacterHorizontalMovement _characterHorizontalMovement;
-		[SerializeField] private CameraAim _cameraAim;
+		[SerializeField] private CharacterCameraAim _characterCameraAim;
 
 		public void Jump()
 		{
@@ -20,7 +20,7 @@ namespace SM.FPS
 
 		public void Move(Vector3 direction)
 		{
-			Vector3 directionRelativeToAim = _cameraAim.YawRotation * direction;
+			Vector3 directionRelativeToAim = _characterCameraAim.YawRotation * direction;
 			
 			_characterHorizontalMovement.Move(directionRelativeToAim);
 		}
