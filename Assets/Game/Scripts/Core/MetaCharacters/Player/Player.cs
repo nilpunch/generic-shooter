@@ -13,6 +13,7 @@ namespace SM.FPS
 		private void Awake()
 		{
 			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
 			
 			_playerInput = new PlayerInput();
 			_playerInput.Enable();
@@ -82,7 +83,15 @@ namespace SM.FPS
 			}
 
 			float scroll = _playerInput.Weapons.ScrollInventory.ReadValue<float>();
-			_characterFirearmControls.ScrollWeapons((int)scroll);
+			
+			if (scroll >= 1)
+			{
+				_characterFirearmControls.ScrollWeapons(1);
+			}
+			else if (scroll <= -1)
+			{
+				_characterFirearmControls.ScrollWeapons(-1);
+			}
 		}
 	}
 }

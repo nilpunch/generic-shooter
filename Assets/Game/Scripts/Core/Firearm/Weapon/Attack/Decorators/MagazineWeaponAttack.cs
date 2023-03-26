@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace SM.FPS
 {
+	/// <summary>
+	/// Decorating attack with ammo and magazine constraints.
+	/// So, decorated weapon will not preform Attack if the magazine is empty.
+	/// </summary>
 	public class MagazineWeaponAttack : WeaponAttack, IWeaponMagazine
 	{
 		[SerializeField] private WeaponAttack _weaponAttack;
@@ -10,8 +14,8 @@ namespace SM.FPS
 		[SerializeField] private int _maxAmmo = 60;
 		[SerializeField] private bool _loadedInitially = true;
 		
-		private int _ammoInMagazine = 0;
-		private int _ammoAmount = 0;
+		private int _ammoInMagazine;
+		private int _ammoAmount;
 
 		private void Awake()
 		{

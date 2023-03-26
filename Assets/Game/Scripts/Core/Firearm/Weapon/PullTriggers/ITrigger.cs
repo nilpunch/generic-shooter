@@ -1,7 +1,7 @@
 ﻿namespace SM.FPS
 {
 	/// <summary>
-	/// Determines fire of a weapon.
+	/// Controls for some weapon action.
 	/// </summary>
 	public interface ITrigger
 	{

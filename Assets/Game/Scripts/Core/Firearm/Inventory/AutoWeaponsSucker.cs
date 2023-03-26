@@ -12,7 +12,7 @@ namespace SM.FPS
 			{
 				if (weaponPickup.CanBePickedUp && _characterWeaponsInventory.HaveFreeSlot)
 				{
-					_characterWeaponsInventory.AddWeapon(weaponPickup.CharacterWeapon);
+					_characterWeaponsInventory.AddWeapon(weaponPickup.WeaponComponents);
 				}
 			}
 		}

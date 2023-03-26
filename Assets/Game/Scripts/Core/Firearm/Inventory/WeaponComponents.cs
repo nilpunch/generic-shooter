@@ -1,13 +1,14 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SM.FPS
 {
-	public abstract class WeaponComponents : MonoBehaviour
+	/// <summary>
+	/// Root for assembled weapon.
+	/// </summary>
+	public class WeaponComponents : MonoBehaviour
 	{
-		[CanBeNull] public virtual ITrigger MainFire => null;
-		[CanBeNull] public virtual ITrigger AlterFire => null;
-		[CanBeNull] public virtual IWeaponMagazine Magazine => null;
-		[CanBeNull] public virtual IFiringModeSwitch FiringModeSwitch => null;
+		[field: SerializeField] public Weapon Weapon { get; private set; }
+		[field: SerializeField] public HandledWeapon HandledWeapon { get; private set; }
+		[field: SerializeField] public VisualWeapon VisualWeapon { get; private set; }
 	}
 }

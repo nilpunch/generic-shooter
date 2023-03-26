@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8461860259428445611
 Transform:
   m_ObjectHideFlags: 0
@@ -129,10 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 1
-  _speed: 10
-  _downforce: 0.5
+  _speed: 100
+  _downforce: 1
   _lifetime: 3
   _raycastLayers:
     serializedVersion: 2
-    m_Bits: 64
-  _projectileRadius: 0.1
+    m_Bits: 65
+  _projectileRadius: 0.05

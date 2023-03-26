@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5479b4e0c04661935e892023f52f87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponsInventory: {fileID: 8566937727759566878}
+  _characterWeaponsInventory: {fileID: 8566937727759566878}
   _secondaryEquipment: {fileID: 0}
 --- !u!1 &2892643457198153668
 GameObject:
@@ -736,14 +736,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6426104982839067703}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.213, y: -0.25, z: 1.128}
+  m_LocalRotation: {x: -0.008951566, y: -0.008494719, z: 0.026098808, w: 0.99958324}
+  m_LocalPosition: {x: 0.349, y: -0.384, z: 1.128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3107408918160338632}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1, y: -1, z: 3}
 --- !u!114 &3715860547631453442
 MonoBehaviour:
   m_ObjectHideFlags: 0

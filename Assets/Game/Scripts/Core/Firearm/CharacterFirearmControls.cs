@@ -4,7 +4,7 @@ namespace SM.FPS
 {
 	public class CharacterFirearmControls : MonoBehaviour
 	{
-		[SerializeField] private CharacterWeaponsInventory _weaponsInventory;
+		[SerializeField] private CharacterWeaponsInventory _characterWeaponsInventory;
 		[SerializeField] private SecondaryEquipment _secondaryEquipment;
 		
 		public void UseKnife()
@@ -19,42 +19,42 @@ namespace SM.FPS
 
 		public void PressWeaponMainPullTrigger()
 		{
-			_weaponsInventory.PressWeaponMainPullTrigger();
+			_characterWeaponsInventory.PressWeaponMainPullTrigger();
 		}
 		
 		public void ReleaseWeaponMainPullTrigger()
 		{
-			_weaponsInventory.ReleaseWeaponMainPullTrigger();
+			_characterWeaponsInventory.ReleaseWeaponMainPullTrigger();
 		}
 		
 		public void PressWeaponAlterPullTrigger()
 		{
-			_weaponsInventory.PressWeaponAlterPullTrigger();
+			_characterWeaponsInventory.PressWeaponAlterPullTrigger();
 		}
 		
 		public void ReleaseWeaponAlterPullTrigger()
 		{
-			_weaponsInventory.ReleaseWeaponAlterPullTrigger();
+			_characterWeaponsInventory.ReleaseWeaponAlterPullTrigger();
 		}
 
 		public void ReloadCurrentWeapon()
 		{
-			_weaponsInventory.ReloadCurrentWeapon();
+			_characterWeaponsInventory.ReloadCurrentWeapon();
 		}
 
 		public void SwitchFiringMode()
 		{
-			_weaponsInventory.SwitchFiringMode();
+			_characterWeaponsInventory.SwitchFiringMode();
 		}
 		
 		public void ThrowAwayCurrentWeapon()
 		{
-			_weaponsInventory.ThrowAwayCurrentWeapon();
+			_characterWeaponsInventory.ThrowAwayCurrentWeapon();
 		}
 
 		public void ScrollWeapons(int positions)
 		{
-			_weaponsInventory.ScrollWeapons(positions);
+			_characterWeaponsInventory.ScrollWeapons(positions);
 		}
 	}
 }

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace SM.FPS
 {
@@ -9,37 +10,43 @@ namespace SM.FPS
 		[SerializeField] private int _weaponsSlots = 2;
 		[SerializeField] private CharacterAim _characterAim;
 		[SerializeField] private CharacterHands _characterHands;
-		
-		[Header("Throwing weapon away")]
-		[SerializeField] private float _throwForce = 10f;
+
+		[Header("Throwing weapon away")] [SerializeField]
+		private float _throwForce = 10f;
+
 		[SerializeField] private float _throwTorque = 3f;
-		
-		private readonly List<CharacterWeapon> _weapons = new List<CharacterWeapon>();
+
+		private readonly List<WeaponComponents> _weapons = new List<WeaponComponents>();
 		private int _currentWeapon;
 
 		public bool HaveFreeSlot => _weapons.Count < _weaponsSlots;
-		
-		protected WeaponComponents CurrentWeaponComponents => CurrentWeapon?.WeaponComponents;
-		protected CharacterWeapon CurrentWeapon => _weapons.Count == 0 ? null : _weapons[_currentWeapon];
 
-		public void AddWeapon(CharacterWeapon weaponPickup)
+		protected Weapon CurrentWeapon => CurrentWeaponComponents?.Weapon;
+		protected WeaponComponents CurrentWeaponComponents => _weapons.Count == 0 ? null : _weapons[_currentWeapon];
+
+		private void Update()
+		{
+			CurrentWeapon?.Aim?.SetShootPositionAndDirection(_characterAim.WorldPosition, _characterAim.WorldDirection);
+		}
+
+		public void AddWeapon(WeaponComponents weaponComponentsPickup)
 		{
 			if (_weapons.Count == _weaponsSlots)
 			{
-				CurrentWeapon.WeaponComponents.MainFire?.Release();
-				CurrentWeapon.WeaponComponents.AlterFire?.Release();
-				CurrentWeapon.HandledWeapon.ThrowAway(_characterAim.WorldDirection * _throwForce, Random.onUnitSphere * _throwTorque);
+				CurrentWeaponComponents.Weapon.MainFire?.Release();
+				CurrentWeaponComponents.Weapon.AlterFire?.Release();
+				CurrentWeaponComponents.HandledWeapon.ThrowAway(_characterAim.WorldDirection * _throwForce,
+					Random.onUnitSphere * _throwTorque);
 
-				_weapons[_currentWeapon] = weaponPickup;
+				_weapons[_currentWeapon] = weaponComponentsPickup;
 			}
 			else
 			{
-				_weapons.Add(weaponPickup);
-				_currentWeapon = _weapons.Count - 1;
+				_weapons.Add(weaponComponentsPickup);
+				SwitchWeaponTo(_weapons.Count - 1);
 			}
-			
-			weaponPickup.HandledWeapon.HandleBy(_characterHands);
-			weaponPickup.Aim.Aim(_characterAim);
+
+			weaponComponentsPickup.HandledWeapon.HandleBy(_characterHands);
 		}
 
 		public void ThrowAwayCurrentWeapon()
@@ -49,50 +56,77 @@ namespace SM.FPS
 				return;
 			}
 
-			CurrentWeapon.WeaponComponents.MainFire?.Release();
-			CurrentWeapon.WeaponComponents.AlterFire?.Release();
-			CurrentWeapon.HandledWeapon.ThrowAway(_characterAim.WorldDirection * _throwForce, Random.onUnitSphere * _throwTorque);
+			CurrentWeaponComponents.Weapon.MainFire?.Release();
+			CurrentWeaponComponents.Weapon.AlterFire?.Release();
+			CurrentWeaponComponents.HandledWeapon.ThrowAway(_characterAim.WorldDirection * _throwForce,
+				Random.onUnitSphere * _throwTorque);
 
 			_weapons.RemoveAt(_currentWeapon);
 			_currentWeapon = _weapons.Count - 1;
+			CurrentWeaponComponents?.VisualWeapon.Show();
 		}
-		
+
 		public void ScrollWeapons(int positions)
 		{
 			if (_weapons.Count == 0)
 				return;
-			
-			_currentWeapon = (_currentWeapon + positions) % _weapons.Count;
+
+			var newWeapon = Mod(_currentWeapon + positions, _weapons.Count);
+
+			SwitchWeaponTo(newWeapon);
+		}
+
+		private void SwitchWeaponTo(int newWeaponIndex)
+		{
+			if (_weapons.Count <= 1)
+			{
+				_currentWeapon = newWeaponIndex;
+				return;
+			}
+
+			CurrentWeaponComponents.VisualWeapon.Hide();
+			_currentWeapon = newWeaponIndex;
+			CurrentWeaponComponents.VisualWeapon.Show();
 		}
 
 		public void PressWeaponMainPullTrigger()
 		{
-			CurrentWeaponComponents?.MainFire?.Press();
+			CurrentWeapon?.Aim?.SetShootPositionAndDirection(_characterAim.WorldPosition, _characterAim.WorldDirection);
+			CurrentWeapon?.MainFire?.Press();
 		}
 
 		public void ReleaseWeaponMainPullTrigger()
 		{
-			CurrentWeaponComponents?.MainFire?.Release();
+			CurrentWeapon?.MainFire?.Release();
 		}
 
 		public void PressWeaponAlterPullTrigger()
 		{
-			CurrentWeaponComponents?.AlterFire?.Press();
+			CurrentWeapon?.Aim?.SetShootPositionAndDirection(_characterAim.WorldPosition, _characterAim.WorldDirection);
+			CurrentWeapon?.AlterFire?.Press();
 		}
 
 		public void ReleaseWeaponAlterPullTrigger()
 		{
-			CurrentWeaponComponents?.AlterFire?.Release();
+			CurrentWeapon?.AlterFire?.Release();
 		}
 
 		public void ReloadCurrentWeapon()
 		{
-			CurrentWeaponComponents?.Magazine?.Reload();
+			CurrentWeapon?.Magazine?.Reload();
 		}
 
 		public void SwitchFiringMode()
 		{
-			CurrentWeaponComponents?.FiringModeSwitch?.NextFiringMode();
+			CurrentWeapon?.FiringModeSwitch?.NextFiringMode();
+		}
+
+		private static int Mod(int a, int b)
+		{
+			int remainder = a % b;
+			if ((b > 0 && remainder < 0) || (b < 0 && remainder > 0))
+				return remainder + b;
+			return remainder;
 		}
 	}
 }

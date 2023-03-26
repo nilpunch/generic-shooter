@@ -6,6 +6,6 @@ namespace SM.FPS
 	{
 		[SerializeField] private Transform _handlePivot;
 
-		public Transform HandlePivot => _handlePivot;
+		public Transform WeaponHandlePivot => _handlePivot;
 	}
 }

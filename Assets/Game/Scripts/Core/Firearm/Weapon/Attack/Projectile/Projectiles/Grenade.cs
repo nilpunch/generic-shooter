@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Tools;
+using UnityEngine;
 
 namespace SM.FPS
 {
-	public class Grenade : Projectile
+	public class Grenade : MonoBehaviour
 	{
 		[SerializeField] private float _damage = 10f;
 		[SerializeField] private float _throwSpeed = 4f;
@@ -16,8 +17,9 @@ namespace SM.FPS
 		[SerializeField] private LayerMask _raycastLayers;
 
 		private float _launchTime;
+		private IPoolReturn<Grenade> _poolReturn;
 
-		public override void Launch(Vector3 position, Vector3 direction)
+		public void Launch(Vector3 position, Vector3 direction)
 		{
 			_launchTime = Time.time;
 
@@ -30,19 +32,24 @@ namespace SM.FPS
 			_rigidbody.angularVelocity = Vector3.zero;
 		}
 
+		public void SetPoolToSelfReturn(IPoolReturn<Grenade> poolReturn)
+		{
+			_poolReturn = poolReturn;
+		}
+
 		private void FixedUpdate()
 		{
 			if (_launchTime + _fuseTime < Time.time)
 			{
 				ExplosionUtility.RaycastBlast(transform.position, _blastRadius, _raycastLayers, _damage);
-				SelfDestruct();
+				DestroySelf();
 			}
 		}
 
-		private void SelfDestruct()
+		private void DestroySelf()
 		{
 			gameObject.SetActive(false);
-			PoolReturn.Return(this);
+			_poolReturn.Return(this);
 		}
 	}
 }

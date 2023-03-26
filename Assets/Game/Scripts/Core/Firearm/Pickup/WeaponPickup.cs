@@ -1,14 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SM.FPS
 {
 	public class WeaponPickup : MonoBehaviour
 	{
-		[SerializeField] private CharacterWeapon _characterWeapon;
+		[SerializeField] private WeaponComponents _weaponComponents;
 
-		public CharacterWeapon CharacterWeapon => _characterWeapon;
+		public WeaponComponents WeaponComponents => _weaponComponents;
 
-		public bool CanBePickedUp => _characterWeapon.HandledWeapon.CanBePickedUp;
+		public bool CanBePickedUp => _weaponComponents.HandledWeapon.CanBePickedUp;
 	}
 }

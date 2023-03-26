@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Tools;
+using UnityEngine;
 
 namespace SM.FPS
 {
-	public class Bullet : Projectile
+	public class Bullet : MonoBehaviour
 	{
 		[SerializeField] private float _damage = 1f;
 		[SerializeField] private float _speed = 10f;
@@ -16,8 +17,12 @@ namespace SM.FPS
 		private Vector3 _velocity;
 		private Vector3 _previousPosition;
 		private float _launchTime;
+		private IPoolReturn<Bullet> _poolReturn;
+		
+		public bool IsAlive => gameObject.activeSelf;
+		public Vector3 DestroyPosition { get; private set; }
 
-		public override void Launch(Vector3 position, Vector3 direction)
+		public void Launch(Vector3 position, Vector3 direction)
 		{
 			_previousPosition = position;
 			_velocity = direction * _speed;
@@ -29,11 +34,16 @@ namespace SM.FPS
 			transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 		}
 
+		public void SetPoolToSelfReturn(IPoolReturn<Bullet> poolReturn)
+		{
+			_poolReturn = poolReturn;
+		}
+
 		private void FixedUpdate()
 		{
 			if (_launchTime + _lifetime < Time.time)
 			{
-				SelfDestruct();
+				DestroySelf();
 				return;
 			}
 			
@@ -53,17 +63,19 @@ namespace SM.FPS
 					damageTarget.TakeDamage(_damage);
 				}
 
-				SelfDestruct();
+				transform.position = _previousPosition + ray.normalized * hitInfo.distance;
+				DestroySelf();
 			}
 
 			_previousPosition = transform.position;
 			transform.rotation = Quaternion.LookRotation(_velocity, Vector3.up);
 		}
 
-		private void SelfDestruct()
+		private void DestroySelf()
 		{
+			DestroyPosition = transform.position;
 			gameObject.SetActive(false);
-			PoolReturn.Return(this);
+			_poolReturn.Return(this);
 		}
 	}
 }
